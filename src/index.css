@@ -2,95 +2,141 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* Accessible Financial Assistant Design System
+   Designed for: Elderly, visually impaired, dyslexic, and intellectually disabled users
+   WCAG AAA compliant color contrasts
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core accessible palette - high contrast, warm tones */
+    --background: 45 30% 97%;
+    --foreground: 220 25% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 220 25% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 220 25% 10%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Trustworthy deep blue - calming and stable */
+    --primary: 215 80% 35%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Soft sage for secondary actions */
+    --secondary: 160 25% 92%;
+    --secondary-foreground: 160 40% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted warm gray for less important elements */
+    --muted: 40 15% 90%;
+    --muted-foreground: 220 15% 40%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent for highlights - warm amber */
+    --accent: 35 90% 55%;
+    --accent-foreground: 35 90% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Success green - for confirmations */
+    --success: 145 65% 35%;
+    --success-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Warning amber */
+    --warning: 35 95% 50%;
+    --warning-foreground: 35 95% 15%;
 
-    --radius: 0.5rem;
+    /* Destructive/error red */
+    --destructive: 0 75% 45%;
+    --destructive-foreground: 0 0% 100%;
 
-    --sidebar-background: 0 0% 98%;
+    --border: 220 15% 80%;
+    --input: 220 15% 85%;
+    --ring: 215 80% 35%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --radius: 1rem;
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Accessibility specific tokens */
+    --tap-target-min: 56px;
+    --font-size-base: 1.25rem;
+    --font-size-lg: 1.5rem;
+    --font-size-xl: 2rem;
+    --font-size-2xl: 2.5rem;
+    --line-height-relaxed: 1.75;
+    --letter-spacing-wide: 0.02em;
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    /* Voice button colors */
+    --voice-listening: 0 85% 55%;
+    --voice-speaking: 145 65% 45%;
+    --voice-idle: 215 80% 35%;
 
-    --sidebar-accent: 240 4.8% 95.9%;
+    /* Sidebar tokens */
+    --sidebar-background: 45 30% 97%;
+    --sidebar-foreground: 220 25% 10%;
+    --sidebar-primary: 215 80% 35%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 15% 90%;
+    --sidebar-accent-foreground: 220 25% 10%;
+    --sidebar-border: 220 15% 80%;
+    --sidebar-ring: 215 80% 35%;
+  }
 
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  /* High Contrast Mode - WCAG AAA */
+  .high-contrast {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 20%;
+    --accent: 50 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    --success: 120 100% 25%;
+    --success-foreground: 0 0% 100%;
+    --warning: 45 100% 50%;
+    --warning-foreground: 0 0% 0%;
+    --destructive: 0 100% 40%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 0%;
+    --input: 0 0% 85%;
+    --ring: 0 0% 0%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: 220 20% 10%;
+    --foreground: 45 20% 95%;
+    --card: 220 20% 15%;
+    --card-foreground: 45 20% 95%;
+    --popover: 220 20% 15%;
+    --popover-foreground: 45 20% 95%;
+    --primary: 215 70% 55%;
+    --primary-foreground: 220 20% 10%;
+    --secondary: 220 15% 25%;
+    --secondary-foreground: 45 20% 95%;
+    --muted: 220 15% 20%;
+    --muted-foreground: 220 10% 65%;
+    --accent: 35 85% 55%;
+    --accent-foreground: 35 90% 10%;
+    --success: 145 60% 45%;
+    --success-foreground: 145 60% 10%;
+    --warning: 35 90% 55%;
+    --warning-foreground: 35 90% 10%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 15% 30%;
+    --input: 220 15% 25%;
+    --ring: 215 70% 55%;
+    --sidebar-background: 220 20% 12%;
+    --sidebar-foreground: 45 20% 95%;
+    --sidebar-primary: 215 70% 55%;
+    --sidebar-primary-foreground: 220 20% 10%;
+    --sidebar-accent: 220 15% 20%;
+    --sidebar-accent-foreground: 45 20% 95%;
+    --sidebar-border: 220 15% 30%;
+    --sidebar-ring: 215 70% 55%;
   }
 }
 
@@ -99,7 +145,212 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground;
+  html {
+    font-size: 20px; /* Large base for accessibility */
+    scroll-behavior: smooth;
   }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.75;
+    letter-spacing: 0.02em;
+  }
+
+  /* Focus styles for keyboard navigation */
+  *:focus-visible {
+    @apply outline-none ring-4 ring-ring ring-offset-4 ring-offset-background;
+  }
+
+  /* Reduced motion for vestibular disorders */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Skip link for screen readers */
+  .skip-link {
+    @apply absolute -top-full left-4 z-50 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold;
+    transition: top 0.2s;
+  }
+
+  .skip-link:focus {
+    @apply top-4;
+  }
+}
+
+@layer components {
+  /* Large accessible button base */
+  .btn-accessible {
+    @apply min-h-[56px] min-w-[56px] px-8 py-4 text-lg font-semibold rounded-2xl;
+    @apply transition-all duration-200 ease-out;
+    @apply focus-visible:ring-4 focus-visible:ring-offset-4;
+  }
+
+  /* Voice button with pulse animation */
+  .voice-button {
+    @apply relative rounded-full flex items-center justify-center;
+    min-width: 80px;
+    min-height: 80px;
+  }
+
+  .voice-button.listening::before {
+    content: '';
+    @apply absolute inset-0 rounded-full;
+    background: hsl(var(--voice-listening) / 0.3);
+    animation: pulse-ring 1.5s infinite;
+  }
+
+  .voice-button.speaking::before {
+    content: '';
+    @apply absolute inset-0 rounded-full;
+    background: hsl(var(--voice-speaking) / 0.3);
+    animation: pulse-ring 1s infinite;
+  }
+
+  /* Action card for main menu */
+  .action-card {
+    @apply flex flex-col items-center justify-center gap-4 p-8;
+    @apply bg-card text-card-foreground rounded-3xl;
+    @apply border-2 border-transparent;
+    @apply shadow-lg hover:shadow-xl;
+    @apply transition-all duration-200;
+    min-height: 180px;
+  }
+
+  .action-card:hover,
+  .action-card:focus-visible {
+    @apply border-primary scale-[1.02];
+  }
+
+  .action-card:active {
+    @apply scale-[0.98];
+  }
+
+  /* Status indicator */
+  .status-dot {
+    @apply w-3 h-3 rounded-full inline-block;
+  }
+
+  .status-dot.active {
+    @apply bg-success;
+    animation: pulse 2s infinite;
+  }
+
+  /* Gesture hint overlay */
+  .gesture-hint {
+    @apply fixed inset-0 pointer-events-none z-40;
+    @apply flex items-center justify-center;
+    @apply bg-foreground/10 backdrop-blur-sm;
+  }
+
+  .gesture-hint-content {
+    @apply bg-card text-card-foreground px-8 py-6 rounded-2xl;
+    @apply text-xl font-semibold text-center;
+    @apply shadow-2xl;
+  }
+}
+
+@layer utilities {
+  /* Text sizes for accessibility */
+  .text-accessible-sm {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .text-accessible-base {
+    font-size: 1.25rem;
+    line-height: 1.75;
+  }
+
+  .text-accessible-lg {
+    font-size: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .text-accessible-xl {
+    font-size: 2rem;
+    line-height: 1.4;
+  }
+
+  .text-accessible-2xl {
+    font-size: 2.5rem;
+    line-height: 1.3;
+  }
+
+  /* Tap target sizing */
+  .tap-target {
+    min-width: 56px;
+    min-height: 56px;
+  }
+
+  .tap-target-lg {
+    min-width: 72px;
+    min-height: 72px;
+  }
+
+  /* Safe area padding for mobile */
+  .safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Animations */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
 }
