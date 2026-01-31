@@ -29,6 +29,21 @@ export function useVoice(options: UseVoiceOptions = {}) {
       return;
     }
 
+    synthRef.current = window.speechSynthesis;
+
+    return () => {
+      recognitionRef.current?.abort();
+      synthRef.current?.cancel();
+    };
+  }, []);
+
+  // Update recognition language when it changes
+  useEffect(() => {
+    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    
+    if (!SpeechRecognitionAPI) return;
+
+    // Create new recognition instance with updated language
     recognitionRef.current = new SpeechRecognitionAPI();
     recognitionRef.current.continuous = false;
     recognitionRef.current.interimResults = true;
@@ -54,13 +69,6 @@ export function useVoice(options: UseVoiceOptions = {}) {
 
     recognitionRef.current.onend = () => {
       setState('idle');
-    };
-
-    synthRef.current = window.speechSynthesis;
-
-    return () => {
-      recognitionRef.current?.abort();
-      synthRef.current?.cancel();
     };
   }, [language, onResult, onError]);
 

@@ -45,7 +45,7 @@ export function AccessibilityToggle({
           className={cn(
             'absolute top-1.5 w-9 h-9 rounded-full bg-card shadow-md',
             'transition-transform duration-200',
-            checked ? 'translate-x-9' : 'translate-x-1.5'
+            checked ? 'translate-x-1.5' : 'translate-x-9'
           )}
         />
         <span className="sr-only">{checked ? 'Enabled' : 'Disabled'}</span>
