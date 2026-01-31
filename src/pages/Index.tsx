@@ -109,12 +109,7 @@ const Index = () => {
       >
         {/* Welcome Section */}
         <section aria-labelledby="welcome-heading" className="text-center space-y-4">
-          <h1 
-            id="welcome-heading" 
-            className="text-accessible-2xl font-bold text-foreground"
-          >
-            Hello! 👋
-          </h1>
+          <h1 id="welcome-heading" className="sr-only">Easy Pay Home</h1>
           <p className="text-accessible-lg text-muted-foreground max-w-md mx-auto">
             Tap a button below or use your voice
           </p>
