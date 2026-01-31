@@ -1,16 +1,19 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, MessageSquare, Volume2, Copy, Check } from 'lucide-react';
+import { ArrowLeft, MessageSquare, Volume2, Copy, Check, Loader2 } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { VoiceButton } from '@/components/VoiceButton';
 import { StatusBanner } from '@/components/StatusBanner';
 import { useVoice } from '@/hooks/useVoice';
 import { useAccessibility } from '@/hooks/useAccessibility';
+import { easyPayApi } from '@/lib/api/easyPayApi';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 const ExplainPage = () => {
   const navigate = useNavigate();
   const { settings } = useAccessibility();
+  const { toast } = useToast();
   
   const [smsText, setSmsText] = useState('');
   const [explanation, setExplanation] = useState('');
@@ -34,33 +37,30 @@ const ExplainPage = () => {
     setIsProcessing(true);
     await speak('Let me explain this message for you.');
 
-    // Simulate AI processing (in real app, would call backend)
-    setTimeout(() => {
-      // Mock explanation - in real app, this would come from LLM
-      const mockExplanation = generateMockExplanation(text);
-      setExplanation(mockExplanation);
+    try {
+      const response = await easyPayApi.explainSms(text, settings.language);
+      
+      if (response.error) {
+        toast({
+          title: "Error",
+          description: response.error,
+          variant: "destructive",
+        });
+        setExplanation('');
+      } else if (response.explanation) {
+        setExplanation(response.explanation);
+        speak(response.explanation);
+      }
+    } catch (error) {
+      console.error('Failed to explain SMS:', error);
+      toast({
+        title: "Error",
+        description: "Could not explain the message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsProcessing(false);
-      speak(mockExplanation);
-    }, 1500);
-  };
-
-  const generateMockExplanation = (text: string): string => {
-    const lower = text.toLowerCase();
-    
-    if (lower.includes('debit') || lower.includes('withdrawn')) {
-      return 'Money was taken from your account. This means you spent or transferred money to someone.';
     }
-    if (lower.includes('credit') || lower.includes('received')) {
-      return 'Money was added to your account. Someone sent you money or your salary was deposited.';
-    }
-    if (lower.includes('otp') || lower.includes('code')) {
-      return 'This is a one-time password. Use this number to verify your transaction. Do not share this with anyone.';
-    }
-    if (lower.includes('balance')) {
-      return 'This message shows how much money you have in your bank account right now.';
-    }
-    
-    return 'This is a bank message. It contains information about your account or a recent transaction. If you are unsure, please visit your bank or call their helpline.';
   };
 
   const handleVoicePress = async () => {
@@ -148,10 +148,18 @@ const ExplainPage = () => {
             className={cn(
               'w-full btn-accessible',
               'bg-primary text-primary-foreground',
-              'disabled:opacity-50 disabled:cursor-not-allowed'
+              'disabled:opacity-50 disabled:cursor-not-allowed',
+              'flex items-center justify-center gap-2'
             )}
           >
-            {isProcessing ? 'Explaining...' : 'Explain This Message'}
+            {isProcessing ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Explaining...
+              </>
+            ) : (
+              'Explain This Message'
+            )}
           </button>
         </section>
 

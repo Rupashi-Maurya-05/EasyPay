@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, IndianRupee, Send, User } from 'lucide-react';
+import { ArrowLeft, IndianRupee, Send, User, Loader2 } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { VoiceButton } from '@/components/VoiceButton';
 import { StatusBanner } from '@/components/StatusBanner';
@@ -8,18 +8,21 @@ import { GestureHint } from '@/components/GestureHint';
 import { useVoice } from '@/hooks/useVoice';
 import { useGestures } from '@/hooks/useGestures';
 import { useAccessibility } from '@/hooks/useAccessibility';
+import { easyPayApi } from '@/lib/api/easyPayApi';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 const PayPage = () => {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const { settings } = useAccessibility();
+  const { toast } = useToast();
   
   const [amount, setAmount] = useState('');
   const [recipient, setRecipient] = useState('');
   const [step, setStep] = useState<'amount' | 'recipient' | 'confirm'>('amount');
   const [gestureHint, setGestureHint] = useState<'swipe-left' | 'swipe-right' | null>(null);
-  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
 
   const handleVoiceResult = useCallback((transcript: string) => {
     const lower = transcript.toLowerCase();
@@ -80,14 +83,28 @@ const PayPage = () => {
     },
   });
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
+    setPaymentStatus('processing');
+    
     // Generate UPI deep link
     const upiLink = `upi://pay?pa=${encodeURIComponent(recipient)}&am=${amount}&cu=INR`;
+    
+    // Log the transaction to the database
+    try {
+      await easyPayApi.logTransaction(recipient, parseFloat(amount), recipient, upiLink);
+    } catch (error) {
+      console.error('Failed to log transaction:', error);
+      // Continue anyway - logging failure shouldn't block payment
+    }
     
     // Try to open UPI app
     window.location.href = upiLink;
     
     setPaymentStatus('success');
+    toast({
+      title: "Opening Payment App",
+      description: `Sending ₹${amount} to ${recipient}`,
+    });
     speak(`Opening payment app to send ${amount} rupees to ${recipient}`);
   };
 
@@ -240,14 +257,25 @@ const PayPage = () => {
 
               <button
                 onClick={handlePayment}
+                disabled={paymentStatus === 'processing'}
                 className={cn(
                   'w-full btn-accessible',
                   'bg-success text-success-foreground',
-                  'flex items-center justify-center gap-3'
+                  'flex items-center justify-center gap-3',
+                  'disabled:opacity-50 disabled:cursor-not-allowed'
                 )}
               >
-                <Send className="w-6 h-6" />
-                Confirm Payment
+                {paymentStatus === 'processing' ? (
+                  <>
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-6 h-6" />
+                    Confirm Payment
+                  </>
+                )}
               </button>
             </div>
           )}
