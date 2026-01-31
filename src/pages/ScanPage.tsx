@@ -1,19 +1,23 @@
 import { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Camera, Upload, Image as ImageIcon, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Camera, Upload, Image as ImageIcon, RotateCcw, Loader2 } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { VoiceButton } from '@/components/VoiceButton';
 import { StatusBanner } from '@/components/StatusBanner';
 import { useVoice } from '@/hooks/useVoice';
 import { useAccessibility } from '@/hooks/useAccessibility';
+import { easyPayApi } from '@/lib/api/easyPayApi';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 const ScanPage = () => {
   const navigate = useNavigate();
   const { settings } = useAccessibility();
+  const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [scanStatus, setScanStatus] = useState<'idle' | 'scanning' | 'done' | 'error'>('idle');
   const [scannedText, setScannedText] = useState('');
 
@@ -39,29 +43,49 @@ const ScanPage = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Create preview
+    // Create preview and base64
     const reader = new FileReader();
-    reader.onload = (e) => {
-      setPreviewUrl(e.target?.result as string);
+    reader.onload = async (e) => {
+      const base64 = e.target?.result as string;
+      setPreviewUrl(base64);
+      setImageBase64(base64);
+      
+      // Process with AI OCR
+      setScanStatus('scanning');
+      await speak('Scanning your image. Please wait.');
+
+      try {
+        const response = await easyPayApi.processOcr(base64, settings.language);
+        
+        if (response.error) {
+          setScanStatus('error');
+          toast({
+            title: "Scan Error",
+            description: response.error,
+            variant: "destructive",
+          });
+          await speak('Sorry, I could not read this image. Please try with a clearer photo.');
+        } else if (response.extractedText) {
+          setScannedText(response.extractedText);
+          setScanStatus('done');
+          await speak('Scan complete. I found some text in your image.');
+        }
+      } catch (error) {
+        console.error('OCR error:', error);
+        setScanStatus('error');
+        toast({
+          title: "Error",
+          description: "Could not process the image. Please try again.",
+          variant: "destructive",
+        });
+      }
     };
     reader.readAsDataURL(file);
-
-    // Simulate OCR processing (in real app, would call backend)
-    setScanStatus('scanning');
-    await speak('Scanning your image. Please wait.');
-
-    // Simulate processing delay
-    setTimeout(() => {
-      // Mock OCR result
-      const mockResult = 'Sample scanned text from your document. This would be the actual OCR result from your backend.';
-      setScannedText(mockResult);
-      setScanStatus('done');
-      speak('Scan complete. I found some text in your image.');
-    }, 2000);
   };
 
   const handleReset = () => {
     setPreviewUrl(null);
+    setImageBase64(null);
     setScanStatus('idle');
     setScannedText('');
     if (fileInputRef.current) {
@@ -184,7 +208,7 @@ const ScanPage = () => {
                 {scanStatus === 'scanning' && (
                   <div className="absolute inset-0 bg-foreground/50 flex items-center justify-center">
                     <div className="bg-card rounded-2xl p-6 text-center">
-                      <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                      <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
                       <p className="text-accessible-lg font-semibold">Scanning...</p>
                     </div>
                   </div>

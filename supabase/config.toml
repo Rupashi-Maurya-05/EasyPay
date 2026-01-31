@@ -1,1 +1,10 @@
 project_id = "fgmpxsfkqowlcxpdlmsw"
+
+[functions.explain-sms]
+verify_jwt = false
+
+[functions.process-ocr]
+verify_jwt = false
+
+[functions.log-transaction]
+verify_jwt = false

@@ -14,7 +14,105 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      sms_explanation_logs: {
+        Row: {
+          created_at: string
+          explanation: string | null
+          id: string
+          language: string | null
+          original_text: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          language?: string | null
+          original_text: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          language?: string | null
+          original_text?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      transaction_logs: {
+        Row: {
+          amount: number | null
+          created_at: string
+          id: string
+          recipient_name: string | null
+          status: string | null
+          transaction_type: string | null
+          upi_id: string | null
+          upi_link: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string
+          id?: string
+          recipient_name?: string | null
+          status?: string | null
+          transaction_type?: string | null
+          upi_id?: string | null
+          upi_link?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string
+          id?: string
+          recipient_name?: string | null
+          status?: string | null
+          transaction_type?: string | null
+          upi_id?: string | null
+          upi_link?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          created_at: string
+          high_contrast: boolean | null
+          id: string
+          language: string | null
+          large_text: boolean | null
+          reduce_motion: boolean | null
+          speak_rate: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          high_contrast?: boolean | null
+          id?: string
+          language?: string | null
+          large_text?: boolean | null
+          reduce_motion?: boolean | null
+          speak_rate?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          high_contrast?: boolean | null
+          id?: string
+          language?: string | null
+          large_text?: boolean | null
+          reduce_motion?: boolean | null
+          speak_rate?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
