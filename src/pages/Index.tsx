@@ -17,24 +17,53 @@ const Index = () => {
   } = useAccessibility();
   const [gestureHint, setGestureHint] = useState<'swipe-left' | 'swipe-right' | null>(null);
   const handleVoiceResult = useCallback((transcript: string) => {
-    const lower = transcript.toLowerCase();
+    const lower = transcript.toLowerCase().trim();
+    const compact = lower.replace(/\s+/g, '');
+    const isHindi = (settings.language || '').toLowerCase().startsWith('hi');
 
-    // Simple voice command detection
-    if (lower.includes('pay') || lower.includes('send money') || lower.includes('transfer')) {
+    const containsAny = (haystack: string, needles: string[]) =>
+      needles.some(n => haystack.includes(n));
+
+    const payKeywords = isHindi
+      ? ['पे', 'पेमेंट', 'भुगतान', 'पैसे', 'पैसा', 'मनी', 'sendmoney', 'transfer']
+      : ['pay', 'send money', 'sendmoney', 'transfer', 'upi'];
+
+    const scanKeywords = isHindi
+      ? ['स्कैन', 'कैमरा', 'क्यूआर', 'क्यूआरकोड', 'qr']
+      : ['scan', 'camera', 'qr'];
+
+    const explainKeywords = isHindi
+      ? ['एक्सप्लेन', 'एसएमएस', 'संदेश', 'मैसेज', 'समझा', 'समझाओ', 'sms']
+      : ['explain', 'sms', 'message'];
+
+    const settingsKeywords = isHindi
+      ? ['सेटिंग', 'मदद', 'हेल्प', 'settings', 'help']
+      : ['settings', 'help'];
+
+    // Match against both spaced + compact forms for robustness
+    if (containsAny(lower, payKeywords) || containsAny(compact, payKeywords)) {
       navigate('/pay');
-    } else if (lower.includes('scan') || lower.includes('camera') || lower.includes('qr')) {
+      return;
+    }
+
+    if (containsAny(lower, scanKeywords) || containsAny(compact, scanKeywords)) {
       navigate('/scan');
-    } else if (lower.includes('explain') || lower.includes('sms') || lower.includes('message')) {
+      return;
+    }
+
+    if (containsAny(lower, explainKeywords) || containsAny(compact, explainKeywords)) {
       navigate('/explain');
-    } else if (lower.includes('settings') || lower.includes('help')) {
+      return;
+    }
+
+    if (containsAny(lower, settingsKeywords) || containsAny(compact, settingsKeywords)) {
       navigate('/settings');
     }
-  }, [navigate]);
+  }, [navigate, settings.language]);
   const {
     state: voiceState,
     startListening,
     stopListening,
-    speak,
     isSupported
   } = useVoice({
     onResult: handleVoiceResult,
@@ -55,7 +84,9 @@ const Index = () => {
     if (voiceState === 'listening') {
       stopListening();
     } else {
-      speak('What would you like to do? Say pay, scan, or explain SMS.').then(() => startListening());
+      // CRITICAL: SpeechRecognition.start() must be called from a direct user gesture (tap/click)
+      // for many browsers (especially on mobile). Do not defer this behind async TTS.
+      startListening();
     }
   };
   const actions = [{
