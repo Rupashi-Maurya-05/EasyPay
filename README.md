@@ -76,7 +76,6 @@ Four large, clear actions:
 * Extra-large text mode
 * Voice speaking speed
 * Language selection
-* Gesture hints on/off
 
 ---
 
@@ -113,7 +112,3 @@ Financial independence should not depend on eyesight, age, or tech fluency.
 **Easy Pay** exists to make digital finance humane, dignified, and accessible.
 
 ---
-
-## 📄 License
-
-MIT License © 2026
