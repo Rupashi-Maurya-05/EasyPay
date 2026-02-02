@@ -86,26 +86,28 @@ const PayPage = () => {
   const handlePayment = async () => {
     setPaymentStatus('processing');
     
-    // Generate UPI deep link
-    const upiLink = `upi://pay?pa=${encodeURIComponent(recipient)}&am=${amount}&cu=INR`;
+    // Generate UPI deep link with proper parameters
+    const upiLink = `upi://pay?pa=${encodeURIComponent(recipient)}&pn=${encodeURIComponent(recipient)}&am=${amount}&cu=INR&tn=Payment%20via%20EasyPay`;
     
     // Log the transaction to the database
     try {
       await easyPayApi.logTransaction(recipient, parseFloat(amount), recipient, upiLink);
     } catch (error) {
       console.error('Failed to log transaction:', error);
-      // Continue anyway - logging failure shouldn't block payment
     }
     
-    // Try to open UPI app
-    window.location.href = upiLink;
-    
-    setPaymentStatus('success');
     toast({
       title: "Opening Payment App",
       description: `Sending ₹${amount} to ${recipient}`,
     });
     speak(`Opening payment app to send ${amount} rupees to ${recipient}`);
+    
+    // Small delay to allow toast/speech, then redirect
+    setTimeout(() => {
+      // Try to open UPI app - this will redirect to installed UPI apps
+      window.location.href = upiLink;
+      setPaymentStatus('success');
+    }, 500);
   };
 
   const handleVoicePress = async () => {
