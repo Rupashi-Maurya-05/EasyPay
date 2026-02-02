@@ -19,6 +19,15 @@ export function useVoice(options: UseVoiceOptions = {}) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
+  const isListeningIntentRef = useRef(false); // Track if we WANT to be listening
+  const onResultRef = useRef(onResult);
+  const onErrorRef = useRef(onError);
+
+  // Keep refs updated with latest callbacks
+  useEffect(() => {
+    onResultRef.current = onResult;
+    onErrorRef.current = onError;
+  }, [onResult, onError]);
 
   useEffect(() => {
     // Check for browser support
@@ -32,64 +41,113 @@ export function useVoice(options: UseVoiceOptions = {}) {
     synthRef.current = window.speechSynthesis;
 
     return () => {
+      isListeningIntentRef.current = false;
       recognitionRef.current?.abort();
       synthRef.current?.cancel();
     };
   }, []);
 
-  // Update recognition language when it changes
+  // Create/update recognition instance when language changes
   useEffect(() => {
     const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     
     if (!SpeechRecognitionAPI) return;
 
-    // Create new recognition instance with updated language
-    recognitionRef.current = new SpeechRecognitionAPI();
-    recognitionRef.current.continuous = false;
-    recognitionRef.current.interimResults = true;
-    recognitionRef.current.lang = language;
+    // Clean up existing instance
+    if (recognitionRef.current) {
+      recognitionRef.current.abort();
+    }
 
-    recognitionRef.current.onresult = (event: any) => {
-      const current = event.resultIndex;
-      const result = event.results[current];
-      const text = result[0].transcript;
+    // Create new recognition instance with updated language
+    const recognition = new SpeechRecognitionAPI();
+    recognition.continuous = true; // Keep listening until manually stopped
+    recognition.interimResults = true;
+    recognition.lang = language;
+
+    recognition.onresult = (event: any) => {
+      const results = event.results;
+      const latestResult = results[results.length - 1];
+      const text = latestResult[0].transcript;
       
+      console.log('Speech recognition result:', text, 'isFinal:', latestResult.isFinal);
       setTranscript(text);
       
-      if (result.isFinal) {
-        onResult?.(text);
+      if (latestResult.isFinal) {
+        // Stop listening after getting final result
+        isListeningIntentRef.current = false;
+        recognition.stop();
+        onResultRef.current?.(text);
       }
     };
 
-    recognitionRef.current.onerror = (event: any) => {
+    recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
+      
+      if (event.error === 'no-speech') {
+        // No speech detected - if we still want to listen, let onend restart
+        console.log('No speech detected, will retry...');
+        return;
+      }
+      
+      if (event.error === 'aborted') {
+        // Aborted intentionally, don't report as error
+        return;
+      }
+      
+      isListeningIntentRef.current = false;
       setState('idle');
-      onError?.(event.error as string);
+      onErrorRef.current?.(event.error as string);
     };
 
-    recognitionRef.current.onend = () => {
-      setState('idle');
+    recognition.onend = () => {
+      console.log('Speech recognition ended, intent:', isListeningIntentRef.current);
+      
+      // Auto-restart if we still intend to be listening (browser stopped due to silence)
+      if (isListeningIntentRef.current) {
+        try {
+          console.log('Restarting speech recognition...');
+          recognition.start();
+        } catch (e) {
+          console.log('Failed to restart recognition:', e);
+          setState('idle');
+        }
+      } else {
+        setState('idle');
+      }
     };
-  }, [language, onResult, onError]);
+
+    recognitionRef.current = recognition;
+  }, [language]);
 
   const startListening = useCallback(() => {
     if (!recognitionRef.current) {
-      onError?.('Speech recognition not supported');
+      onErrorRef.current?.('Speech recognition not supported');
       return;
     }
 
     setTranscript('');
     setState('listening');
+    isListeningIntentRef.current = true;
     
     try {
       recognitionRef.current.start();
+      console.log('Started speech recognition with language:', language);
     } catch (error) {
-      // Already started
-      console.log('Recognition already started');
+      // Already started, stop and restart
+      console.log('Recognition already started, restarting...');
+      recognitionRef.current.stop();
+      setTimeout(() => {
+        try {
+          recognitionRef.current?.start();
+        } catch (e) {
+          console.error('Failed to restart recognition:', e);
+        }
+      }, 100);
     }
-  }, [onError]);
+  }, [language]);
 
   const stopListening = useCallback(() => {
+    isListeningIntentRef.current = false;
     recognitionRef.current?.stop();
     setState('idle');
   }, []);
