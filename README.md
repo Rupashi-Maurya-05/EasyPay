@@ -1,73 +1,119 @@
-# Welcome to your Lovable project
+# 🌟 Easy Pay – An Accessible Financial Assistant
 
-## Project info
+**Easy Pay** is an accessibility-first financial assistant designed for seniors, visually impaired users, and anyone who benefits from simple, voice-driven interactions. Built with **trust, clarity, and ease of use** at its core, Easy Pay enables users to make UPI payments, scan text, and understand financial SMS messages — all through **voice and large, high-contrast UI controls**.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+---
 
-## How can I edit this code?
+## 🎯 Mission
 
-There are several ways of editing your application.
+To make digital payments and financial information **simple, safe, and accessible for everyone**, regardless of age, vision, or technical ability.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## ✨ Key Features
 
-Changes made via Lovable will be committed automatically to this repo.
+### 🗣️ Voice-First Experience
 
-**Use your preferred IDE**
+* Voice input using **Web Speech API**
+* Text-to-speech feedback for every action
+* Adjustable speaking speed
+* Multi-language support (Hindi, Tamil, Telugu, and more)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 🏠 Simple Home Screen
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Four large, clear actions:
 
-Follow these steps:
+1. **Pay** – Generate UPI deep links
+2. **Scan** – OCR camera with preview
+3. **Explain SMS** – Read & explain financial messages
+4. **Settings** – Accessibility controls
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### ♿ Accessibility First
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+* **20px base font size** (extra-large option available)
+* **56px+ tap targets**
+* **High-contrast mode** (7:1 contrast ratio minimum)
+* Semantic HTML + ARIA labels
+* Full keyboard navigation
+* Screen-reader friendly layout
 
-# Step 3: Install the necessary dependencies.
-npm i
+### 📷 OCR Camera
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+* Capture and preview text before processing
+* Designed for shaky hands and low vision
+* Large preview and clear confirmation steps
 
-**Edit a file directly in GitHub**
+### 💸 UPI Payments
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+* Simple UPI payment link generator
+* No clutter, no confusion
+* Voice-guided confirmation
 
-**Use GitHub Codespaces**
+### 👆 Gesture Support
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+* Swipe left/right for navigation
+* Visual hints for discoverability
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## 🎨 Design System
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+| Element       | Specification                        |
+| ------------- | ------------------------------------ |
+| Primary Color | Deep Trustworthy Blue                |
+| Background    | Warm Cream (eye-friendly)            |
+| Font Size     | 20px base                            |
+| Buttons       | Rounded, 56px+ tap targets           |
+| Fonts         | System fonts (maximum compatibility) |
+| Contrast      | Minimum 7:1                          |
+| Layout        | Spacious, calm, predictable          |
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## ⚙️ Accessibility Settings Panel
 
-## Can I connect a custom domain to my Lovable project?
+* High-contrast mode toggle
+* Extra-large text mode
+* Voice speaking speed
+* Language selection
+* Gesture hints on/off
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🛠️ Tech Stack
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+* **Frontend:** HTML, CSS, JavaScript
+* **Voice:** Web Speech API (Speech-to-Text & Text-to-Speech)
+* **OCR:** Camera + OCR processing
+* **Payments:** UPI Deep Links
+* **Accessibility:** WCAG-aligned semantic HTML & ARIA
+
+---
+
+## 📸 Preview
+
+> *(Add screenshots or GIFs here showcasing voice control, large buttons, OCR preview, and high-contrast mode)*
+
+---
+
+## 🧪 Accessibility Checklist
+
+* [x] WCAG AAA contrast ratios
+* [x] Screen reader compatible
+* [x] Keyboard navigable
+* [x] Voice-only usable
+* [x] Large touch targets
+* [x] Multi-language support
+
+---
+
+## ❤️ Why This Matters
+
+Financial independence should not depend on eyesight, age, or tech fluency.
+**Easy Pay** exists to make digital finance humane, dignified, and accessible.
+
+---
+
+## 📄 License
+
+MIT License © 2026
