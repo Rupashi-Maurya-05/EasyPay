@@ -22,8 +22,8 @@ export function AccessibilityToggle({
             {description}
           </p>}
       </div>
-      <button id={id} role="switch" aria-checked={checked} onClick={() => onChange(!checked)} className={cn("relative w-20 h-12 rounded-full transition-colors duration-200 focus-visible:ring-4 focus-visible:ring-offset-4 text-justify", checked ? 'bg-primary' : 'bg-muted')}>
-        <span className={cn("absolute top-1.5 w-9 h-9 rounded-full bg-card shadow-md transition-transform duration-200 text-justify mx-0 px-0", checked ? 'translate-x-1.5' : 'translate-x-9')} />
+      <button id={id} role="switch" aria-checked={checked} onClick={() => onChange(!checked)} className={cn("relative w-20 h-12 rounded-full transition-colors duration-200 focus-visible:ring-4 focus-visible:ring-offset-4 text-left", checked ? 'bg-primary' : 'bg-muted')}>
+        <span className={cn("absolute top-1.5 w-9 h-9 rounded-full bg-card shadow-md transition-transform duration-200 mx-0 px-0 text-left", checked ? 'translate-x-1.5' : 'translate-x-9')} />
         <span className="sr-only">{checked ? 'Enabled' : 'Disabled'}</span>
       </button>
     </div>;
