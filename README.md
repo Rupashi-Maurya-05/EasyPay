@@ -1,4 +1,4 @@
-<img width="2240" height="1225" alt="Screenshot (97)" src="https://github.com/user-attachments/assets/e9aef5ac-fbb0-4dfb-a610-f4b3a426c002" /># 🌟 Easy Pay – Turning financial confusion into confident decisions
+<img width="2240" height="1225" alt="Screenshot (97)" src="https://github.com/user-attachments/assets/e9aef5ac-fbb0-4dfb-a610-f4b3a426c002" /># 🌟 Easy Pay – Simplifying money. Empowering decisions.
 
 **Easy Pay** is an accessibility-first financial assistant designed for seniors, visually impaired users, and anyone who benefits from simple, voice-driven interactions. Built with **trust, clarity, and ease of use** at its core, Easy Pay enables users to make UPI payments, scan text, and understand financial SMS messages — all through **voice and large, high-contrast UI controls**.
 
