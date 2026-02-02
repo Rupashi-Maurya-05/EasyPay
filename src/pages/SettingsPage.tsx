@@ -4,6 +4,7 @@ import { Header } from '@/components/Header';
 import { AccessibilityToggle } from '@/components/AccessibilityToggle';
 import { useAccessibility } from '@/hooks/useAccessibility';
 import { cn } from '@/lib/utils';
+
 const SettingsPage = () => {
   const navigate = useNavigate();
   const {
@@ -13,49 +14,41 @@ const SettingsPage = () => {
     toggleReduceMotion,
     setSpeakRate,
     setLanguage,
-    resetSettings
+    resetSettings,
   } = useAccessibility();
-  const languages = [{
-    code: 'en-US',
-    name: 'English'
-  }, {
-    code: 'hi-IN',
-    name: 'हिंदी (Hindi)'
-  }, {
-    code: 'ta-IN',
-    name: 'தமிழ் (Tamil)'
-  }, {
-    code: 'te-IN',
-    name: 'తెలుగు (Telugu)'
-  }, {
-    code: 'bn-IN',
-    name: 'বাংলা (Bengali)'
-  }, {
-    code: 'mr-IN',
-    name: 'मराठी (Marathi)'
-  }];
-  const speakRates = [{
-    value: 0.5,
-    label: 'Very Slow'
-  }, {
-    value: 0.75,
-    label: 'Slow'
-  }, {
-    value: 0.9,
-    label: 'Normal'
-  }, {
-    value: 1.1,
-    label: 'Fast'
-  }, {
-    value: 1.5,
-    label: 'Very Fast'
-  }];
-  return <div className="min-h-screen bg-background">
+
+  const languages = [
+    { code: 'en-US', name: 'English' },
+    { code: 'hi-IN', name: 'हिंदी (Hindi)' },
+    { code: 'ta-IN', name: 'தமிழ் (Tamil)' },
+    { code: 'te-IN', name: 'తెలుగు (Telugu)' },
+    { code: 'bn-IN', name: 'বাংলা (Bengali)' },
+    { code: 'mr-IN', name: 'मराठी (Marathi)' },
+  ];
+
+  const speakRates = [
+    { value: 0.5, label: 'Very Slow' },
+    { value: 0.75, label: 'Slow' },
+    { value: 0.9, label: 'Normal' },
+    { value: 1.1, label: 'Fast' },
+    { value: 1.5, label: 'Very Fast' },
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
       <Header />
 
       <main className="container py-8 space-y-8 safe-area-inset">
         {/* Back Button */}
-        <button onClick={() => navigate('/')} className={cn('flex items-center gap-2 tap-target rounded-xl px-4', 'text-muted-foreground hover:text-foreground', 'focus-visible:ring-4 focus-visible:ring-offset-2')} aria-label="Go back to home">
+        <button
+          onClick={() => navigate('/')}
+          className={cn(
+            'flex items-center gap-2 tap-target rounded-xl px-4',
+            'text-muted-foreground hover:text-foreground',
+            'focus-visible:ring-4 focus-visible:ring-offset-2'
+          )}
+          aria-label="Go back to home"
+        >
           <ArrowLeft className="w-6 h-6" />
           <span className="text-accessible-base">Back</span>
         </button>
@@ -78,13 +71,31 @@ const SettingsPage = () => {
           </h2>
           <div className="bg-card rounded-3xl border-2 border-border divide-y divide-border">
             <div className="px-6">
-              <AccessibilityToggle id="high-contrast" label="High Contrast" description="Black and white colors for maximum visibility" checked={settings.highContrast} onChange={toggleHighContrast} />
+              <AccessibilityToggle
+                id="high-contrast"
+                label="High Contrast"
+                description="Black and white colors for maximum visibility"
+                checked={settings.highContrast}
+                onChange={toggleHighContrast}
+              />
             </div>
             <div className="px-6">
-              <AccessibilityToggle id="large-text" label="Extra Large Text" description="Make all text even bigger" checked={settings.largeText} onChange={toggleLargeText} />
+              <AccessibilityToggle
+                id="large-text"
+                label="Extra Large Text"
+                description="Make all text even bigger"
+                checked={settings.largeText}
+                onChange={toggleLargeText}
+              />
             </div>
             <div className="px-6">
-              <AccessibilityToggle id="reduce-motion" label="Reduce Motion" description="Turn off animations and transitions" checked={settings.reduceMotion} onChange={toggleReduceMotion} />
+              <AccessibilityToggle
+                id="reduce-motion"
+                label="Reduce Motion"
+                description="Turn off animations and transitions"
+                checked={settings.reduceMotion}
+                onChange={toggleReduceMotion}
+              />
             </div>
           </div>
         </section>
@@ -101,9 +112,23 @@ const SettingsPage = () => {
               Speaking Speed
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {speakRates.map(rate => <button key={rate.value} onClick={() => setSpeakRate(rate.value)} className={cn('py-4 px-4 rounded-2xl text-accessible-base font-medium', 'border-2 transition-all', 'focus-visible:ring-4 focus-visible:ring-offset-2', settings.speakRate === rate.value ? 'bg-primary text-primary-foreground border-primary' : 'bg-background border-border hover:border-primary')} aria-pressed={settings.speakRate === rate.value}>
+              {speakRates.map((rate) => (
+                <button
+                  key={rate.value}
+                  onClick={() => setSpeakRate(rate.value)}
+                  className={cn(
+                    'py-4 px-4 rounded-2xl text-accessible-base font-medium',
+                    'border-2 transition-all',
+                    'focus-visible:ring-4 focus-visible:ring-offset-2',
+                    settings.speakRate === rate.value
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-background border-border hover:border-primary'
+                  )}
+                  aria-pressed={settings.speakRate === rate.value}
+                >
                   {rate.label}
-                </button>)}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -112,17 +137,36 @@ const SettingsPage = () => {
             <label htmlFor="language-select" className="block text-accessible-lg font-semibold">
               Language
             </label>
-            <select id="language-select" value={settings.language} onChange={e => setLanguage(e.target.value)} className={cn("w-full text-accessible-lg bg-background border-2 border-input rounded-2xl py-4 focus:border-primary focus:outline-none focus:ring-4 focus:ring-ring px-[2px] pr-[29px]")}>
-              {languages.map(lang => <option key={lang.code} value={lang.code}>
+            <select
+              id="language-select"
+              value={settings.language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className={cn(
+                'w-full text-accessible-lg',
+                'bg-background border-2 border-input rounded-2xl',
+                'py-4 px-6',
+                'focus:border-primary focus:outline-none focus:ring-4 focus:ring-ring'
+              )}
+            >
+              {languages.map((lang) => (
+                <option key={lang.code} value={lang.code}>
                   {lang.name}
-                </option>)}
+                </option>
+              ))}
             </select>
           </div>
         </section>
 
         {/* Reset Button */}
         <section className="pt-4">
-          <button onClick={resetSettings} className={cn('w-full btn-accessible', 'bg-muted text-muted-foreground', 'flex items-center justify-center gap-3')}>
+          <button
+            onClick={resetSettings}
+            className={cn(
+              'w-full btn-accessible',
+              'bg-muted text-muted-foreground',
+              'flex items-center justify-center gap-3'
+            )}
+          >
             <RotateCcw className="w-6 h-6" />
             Reset to Default Settings
           </button>
@@ -140,6 +184,8 @@ const SettingsPage = () => {
           </p>
         </section>
       </main>
-    </div>;
+    </div>
+  );
 };
+
 export default SettingsPage;
